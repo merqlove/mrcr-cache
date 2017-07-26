@@ -8,16 +8,29 @@ RSpec.describe Mrcr::Cache do
   shared_examples_for 'class with cache' do
     describe '#fetch_or_store' do
       it 'stores and fetches a value' do
-        args = [1, 2, 3]
+        arg = 2
         value = 'foo'
 
-        expect(klass.fetch_or_store(*args) { value }).to be(value)
-        expect(klass.fetch_or_store(*args)).to be(value)
+        expect(klass.fetch_or_store(arg) { value }).to be(value)
+        expect(klass.fetch_or_store(arg)).to be(value)
 
         object = klass.new
 
-        expect(object.fetch_or_store(*args) { value }).to be(value)
-        expect(object.fetch_or_store(*args)).to be(value)
+        expect(object.fetch_or_store(arg) { value }).to be(value)
+        expect(object.fetch_or_store(arg)).to be(value)
+      end
+
+      it 'fetches a value with defaults' do
+        arg = 3
+        value = 'foo'
+
+        expect(klass.fetch(arg, 4)).to be(4)
+
+        object = klass.new
+
+        expect(object.fetch(arg, 5)).to be(5)
+        expect(object.fetch_or_store(arg) { value }).to be(value)
+        expect(object.fetch(arg, 5)).to be(value)
       end
     end
   end
@@ -43,20 +56,20 @@ RSpec.describe Mrcr::Cache do
 
     it 'uses the same values in child and parent' do
       value = Object.new
-      expect(base_class.fetch_or_store(1, 2) { value }).to be(value)
-      expect(base_class.fetch_or_store(1, 2) { fail }).to be(value)
+      expect(base_class.fetch_or_store(1) { value }).to be(value)
+      expect(base_class.fetch_or_store(1) { fail }).to be(value)
 
-      expect(child_class.fetch_or_store(1, 2) { fail }).to be(value)
-      expect(child_class.new.fetch_or_store(1, 2) { fail }).to be(value)
+      expect(child_class.fetch_or_store(1) { fail }).to be(value)
+      expect(child_class.new.fetch_or_store(1) { fail }).to be(value)
     end
 
     it 'does not depend on fetch order' do
       value = Object.new
-      expect(child_class.fetch_or_store(1, 2) { value }).to be(value)
-      expect(child_class.fetch_or_store(1, 2) { fail }).to be(value)
+      expect(child_class.fetch_or_store(1) { value }).to be(value)
+      expect(child_class.fetch_or_store(1) { fail }).to be(value)
 
-      expect(base_class.fetch_or_store(1, 2) { fail }).to be(value)
-      expect(base_class.new.fetch_or_store(1, 2) { fail }).to be(value)
+      expect(base_class.fetch_or_store(1) { fail }).to be(value)
+      expect(base_class.new.fetch_or_store(1) { fail }).to be(value)
     end
   end
 end

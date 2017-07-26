@@ -11,7 +11,8 @@ module Mrcr
   #     extend Mrcr::Cache
   #
   #     def heavy_computation(arg1, arg2)
-  #       fetch_or_store(arg1, arg2) { arg1 ^ arg2 }
+  #       fetch_or_store(arg1) { arg1 ^ arg2 }
+  #       fetch(arg1, nil)
   #     end
   #   end
   #
@@ -45,8 +46,22 @@ module Mrcr
     #       they are always the same instances, otherwise you introduce a memory leak
     #
     # @return [Object] block's return value (cached for subsequent calls with the same argument values)
-    def fetch_or_store(*args, &block)
-      cache.fetch_or_store(args.hash, &block)
+    def fetch_or_store(key, &block)
+      cache.fetch_or_store(key.hash, &block)
+    end
+
+    # Caches a result of the block evaluation
+    #
+    # @param [Array<Object>] args List of hashable objects
+    # @yield An arbitrary block
+    #
+    # @note beware Proc instance hashes are not equal, i.e. -> { 1 }.hash != -> { 1 }.hash,
+    #       this means you shouldn't pass Procs in args unless you're sure
+    #       they are always the same instances, otherwise you introduce a memory leak
+    #
+    # @return [Object] block's return value (cached for subsequent calls with the same argument values)
+    def fetch(key, default = nil)
+      cache.fetch(key.hash, default)
     end
 
     # Instance methods
@@ -57,8 +72,19 @@ module Mrcr
       # @yield An arbitrary block
       #
       # @return [Object] block's return value
-      def fetch_or_store(*args, &block)
-        self.class.fetch_or_store(*args, &block)
+      def fetch_or_store(key, &block)
+        self.class.fetch_or_store(key, &block)
+      end
+
+      # Delegates call to the class-level method
+      #
+      # @param [Object] value List of hashable objects
+      # @param [Object] default List of hashable objects
+      # @yield An arbitrary block
+      #
+      # @return [Object] block's return value
+      def fetch(key, default = nil)
+        self.class.fetch(key, default)
       end
     end
   end
