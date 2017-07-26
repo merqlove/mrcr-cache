@@ -38,7 +38,7 @@ module Mrcr
 
     # Caches a result of the block evaluation
     #
-    # @param [Array<Object>] args List of hashable objects
+    # @param [Object] key Hashable object
     # @yield An arbitrary block
     #
     # @note beware Proc instance hashes are not equal, i.e. -> { 1 }.hash != -> { 1 }.hash,
@@ -52,7 +52,8 @@ module Mrcr
 
     # Caches a result of the block evaluation
     #
-    # @param [Array<Object>] args List of hashable objects
+    # @param [Object] args Hashable object
+    # @param [Object] default Default value
     # @yield An arbitrary block
     #
     # @note beware Proc instance hashes are not equal, i.e. -> { 1 }.hash != -> { 1 }.hash,
@@ -68,7 +69,7 @@ module Mrcr
     module Methods
       # Delegates call to the class-level method
       #
-      # @param [Array<Object>] args List of hashable objects
+      # @param [Array<Object>] key Hashable object
       # @yield An arbitrary block
       #
       # @return [Object] block's return value
@@ -78,8 +79,8 @@ module Mrcr
 
       # Delegates call to the class-level method
       #
-      # @param [Object] value List of hashable objects
-      # @param [Object] default List of hashable objects
+      # @param [Object] key Hashable object
+      # @param [Object] default Default value.
       # @yield An arbitrary block
       #
       # @return [Object] block's return value
