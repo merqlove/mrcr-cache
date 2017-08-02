@@ -50,17 +50,14 @@ module Mrcr
       cache.fetch_or_store(key.hash, &block)
     end
 
-    # Caches a result of the block evaluation
+    # Fetch a cache by key & default
     #
     # @param [Object] key Hashable object
     # @param [Object] default Default value
-    # @yield An arbitrary block
     #
-    # @note beware Proc instance hashes are not equal, i.e. -> { 1 }.hash != -> { 1 }.hash,
-    #       this means you shouldn't pass Procs in args unless you're sure
-    #       they are always the same instances, otherwise you introduce a memory leak
+    # @note (see #fetch_or_store)
     #
-    # @return [Object] block's return value (cached for subsequent calls with the same argument values)
+    # @return [Object] return value or default
     def fetch(key, default = nil)
       cache.fetch(key.hash, default)
     end
@@ -81,9 +78,8 @@ module Mrcr
       #
       # @param [Object] key Hashable object
       # @param [Object] default Default value.
-      # @yield An arbitrary block
       #
-      # @return [Object] block's return value
+      # @return [Object] return value or default
       def fetch(key, default = nil)
         self.class.fetch(key, default)
       end
