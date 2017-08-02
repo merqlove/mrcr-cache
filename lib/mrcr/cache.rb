@@ -52,7 +52,7 @@ module Mrcr
 
     # Caches a result of the block evaluation
     #
-    # @param [Object] args Hashable object
+    # @param [Object] key Hashable object
     # @param [Object] default Default value
     # @yield An arbitrary block
     #
@@ -69,7 +69,7 @@ module Mrcr
     module Methods
       # Delegates call to the class-level method
       #
-      # @param [Array<Object>] key Hashable object
+      # @param [Object] key Hashable object
       # @yield An arbitrary block
       #
       # @return [Object] block's return value
