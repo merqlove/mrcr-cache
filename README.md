@@ -36,7 +36,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 ## Thanks
 
 - This project is a copy of cache module from https://github.com/dry-rb/dry-core.
-  It made well done, but extracted for better support for our own needs, as it primary uses `concurrent-ruby`.
+  Extracted for better support for our own needs(fetch feature), as it primary uses only `concurrent-ruby`.
 
 ## Contributing
 
